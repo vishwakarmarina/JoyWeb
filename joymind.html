@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JoyMind — Ask About Navin's Projects</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-icon" style="background: var(--purple);"></div>
+      Joy
+    </div>
+    <div class="nav-tabs">
+      <a href="index.html" class="nav-tab">JoyFlow</a>
+      <a href="keystroke.html" class="nav-tab">Keystroke</a>
+      <a href="joymind.html" class="nav-tab active">JoyMind</a>
+    </div>
+    <a href="#chat" class="nav-cta">Try JoyMind</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-icon" style="background: var(--purple); display:flex; align-items:center; justify-content:center; font-size:40px;">🧠</div>
+    <h1>JoyMind</h1>
+    <p class="hero-tagline">
+      Ask questions about JoyFlow, Keystroke, and the Joy family of apps — answered live by an AI grounded in real project content.
+    </p>
+  </div>
+</header>
+
+<section class="chat-section" id="chat">
+  <div class="section-inner">
+    <div class="chat-container">
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-message chat-message-bot">
+          Hi! I'm JoyMind. Ask me anything about JoyFlow or Keystroke — try "What features does JoyFlow have?" or "Is Keystroke free?"
+        </div>
+      </div>
+
+      <form class="chat-input-row" id="chatForm">
+        <input
+          type="text"
+          id="chatInput"
+          class="chat-input"
+          placeholder="Ask about JoyFlow, Keystroke, or JoyWeb..."
+          autocomplete="off"
+          required
+        />
+        <button type="submit" class="btn btn-primary chat-send-btn" id="chatSendBtn">Ask</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="section-inner">
+    <div class="eyebrow">Why JoyMind</div>
+    <h2>An AI that actually knows the Joy family</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">✦</div>
+        <h3>Grounded Answers</h3>
+        <p>Every answer is pulled from real JoyFlow and Keystroke content — not guessed, not hallucinated.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Fast &amp; Serverless</h3>
+        <p>Runs on Cloudflare Workers with a vector search backend — no server running 24/7.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Growing Knowledge</h3>
+        <p>JoyMind's knowledge base grows as more Joy projects and docs get added over time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="section-inner footer-inner">
+    <div class="footer-brand">
+      <div class="footer-icon" style="background: var(--purple);"></div>
+      <div>
+        <div class="footer-title">JoyMind</div>
+        <div class="footer-sub">An experimental AI assistant for the Joy family of apps.</div>
+      </div>
+    </div>
+    <div class="footer-copy">Built independently. Not affiliated with any other company. · <a href="privacy.html" style="color: var(--text-tertiary);">Privacy Policy</a></div>
+  </div>
+</footer>
+
+<script>
+const WORKER_URL = "https://joymind-worker.joyflow-navin.workers.dev/ask";
+
+const chatMessages = document.getElementById("chatMessages");
+const chatForm = document.getElementById("chatForm");
+const chatInput = document.getElementById("chatInput");
+const chatSendBtn = document.getElementById("chatSendBtn");
+
+function addMessage(text, sender) {
+  const msg = document.createElement("div");
+  msg.className = `chat-message chat-message-${sender}`;
+  msg.textContent = text;
+  chatMessages.appendChild(msg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return msg;
+}
+
+chatForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const question = chatInput.value.trim();
+  if (!question) return;
+
+  addMessage(question, "user");
+  chatInput.value = "";
+  chatSendBtn.disabled = true;
+
+  const loadingMsg = addMessage("Thinking...", "bot");
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question }),
+    });
+
+    if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+
+    const data = await res.json();
+    loadingMsg.textContent = data.answer || "Sorry, I couldn't find an answer to that.";
+  } catch (err) {
+    loadingMsg.textContent = "Something went wrong reaching JoyMind. Please try again in a moment.";
+    console.error(err);
+  } finally {
+    chatSendBtn.disabled = false;
+    chatInput.focus();
+  }
+});
+</script>
+
+</body>
+</html>
