@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital@0;1&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 * {
   margin: 0;
@@ -7,29 +7,29 @@
 }
 
 :root {
-  /* ---- vintage-car palette (same variable names as before, new values) ---- */
-  --black: #EDE4D2;              /* page background: Cameo Cream */
-  --purple: #7A2A28;             /* primary accent: Fiesta Maroon */
-  --purple-light: #B0893F;       /* secondary accent: Brass */
-  --purple-dark: #5A1E1D;        /* deep maroon */
-  --cyan: #33635F;               /* Surf Teal */
-  --cyan-light: #3B6E71;
-  --white: #221C16;              /* ink — main text/foreground on cream */
-  --text-secondary: rgba(34,28,22,0.72);
-  --text-tertiary: rgba(34,28,22,0.5);
-  --glass-fill: #F5EFE1;         /* paper card fill */
-  --glass-border: rgba(34,28,22,0.22);
-  --purple-fill: rgba(122,42,40,0.08);
-  --purple-border: rgba(122,42,40,0.4);
+  /* ---- Joy dark-purple palette (same variable names as before, new values) ---- */
+  --black: #0B0A12;              /* page background: near-black */
+  --purple: #6D5DF6;             /* primary accent: Joy purple (matches logo) */
+  --purple-light: #8B7CF6;       /* secondary accent: lighter purple */
+  --purple-dark: #4C3FD1;        /* deep purple */
+  --cyan: #4F8EF7;               /* secondary accent: soft blue */
+  --cyan-light: #7AB0FF;
+  --white: #F3F2FA;              /* main text/foreground on dark */
+  --text-secondary: rgba(243,242,250,0.72);
+  --text-tertiary: rgba(243,242,250,0.5);
+  --glass-fill: rgba(255,255,255,0.045);   /* glass card fill */
+  --glass-border: rgba(255,255,255,0.1);
+  --purple-fill: rgba(109,93,246,0.14);
+  --purple-border: rgba(109,93,246,0.4);
 
-  /* extra semantic names used below */
-  --ink: #221C16;
-  --cream: #EDE4D2;
-  --paper: #F5EFE1;
-  --brass: #B0893F;
-  --maroon: #7A2A28;
-  --maroon-deep: #5A1E1D;
-  --teal: #33635F;
+  /* extra semantic names used below (kept for compatibility with existing rules) */
+  --ink: rgba(255,255,255,0.14);
+  --cream: #F3F2FA;
+  --paper: rgba(255,255,255,0.045);
+  --brass: #8B7CF6;
+  --maroon: #6D5DF6;
+  --maroon-deep: #4C3FD1;
+  --teal: #4F8EF7;
 }
 
 html {
@@ -39,7 +39,7 @@ html {
 body {
   background: var(--black);
   color: var(--white);
-  font-family: 'Libre Baskerville', Georgia, serif;
+  font-family: 'Inter', -apple-system, sans-serif;
   line-height: 1.5;
   overflow-x: hidden;
 }
@@ -55,9 +55,9 @@ body {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(237,228,210,0.88);
+  background: rgba(11,10,18,0.82);
   backdrop-filter: blur(10px);
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .nav-inner {
@@ -75,8 +75,8 @@ body {
   align-items: center;
   gap: 4px;
   background: var(--paper);
-  border: 1px solid var(--ink);
-  border-radius: 4px;
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
   padding: 4px;
   flex-shrink: 0;
 }
@@ -90,18 +90,18 @@ body {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 8px 16px;
-  border-radius: 2px;
+  border-radius: 6px;
   transition: color 0.2s ease, background 0.2s ease;
   white-space: nowrap;
 }
 
 .nav-tab:hover {
-  color: var(--ink);
+  color: var(--white);
 }
 
 .nav-tab.active {
-  color: var(--cream);
-  background: var(--maroon);
+  color: var(--white);
+  background: var(--purple);
 }
 
 .brand {
@@ -117,29 +117,28 @@ body {
 .brand-icon {
   width: 28px;
   height: 28px;
-  border-radius: 6px;
-  border: 1px solid var(--ink);
+  border-radius: 8px;
 }
 
 .nav-cta {
-  background: var(--maroon);
-  color: var(--cream);
+  background: var(--purple);
+  color: var(--white);
   text-decoration: none;
   padding: 9px 18px;
-  border: 2px solid var(--ink);
-  border-radius: 4px;
+  border: none;
+  border-radius: 8px;
   font-family: 'Space Mono', monospace;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 0 4px 16px rgba(109,93,246,0.4);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .nav-cta:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 5px 5px 0 var(--ink);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(109,93,246,0.55);
 }
 
 /* Hero */
@@ -157,12 +156,12 @@ body {
   transform: translateX(-50%);
   width: 700px;
   height: 700px;
-  background: radial-gradient(circle, rgba(176,137,63,0.28) 0%, rgba(176,137,63,0) 65%);
+  background: radial-gradient(circle, rgba(109,93,246,0.28) 0%, rgba(109,93,246,0) 65%);
   pointer-events: none;
 }
 
 .hero-glow-keystroke {
-  background: radial-gradient(circle, rgba(122,42,40,0.22) 0%, rgba(51,99,95,0.16) 45%, rgba(51,99,95,0) 65%);
+  background: radial-gradient(circle, rgba(109,93,246,0.22) 0%, rgba(79,142,247,0.16) 45%, rgba(79,142,247,0) 65%);
 }
 
 .hero-inner {
@@ -174,10 +173,9 @@ body {
 .hero-icon {
   width: 96px;
   height: 96px;
-  border-radius: 18px;
-  border: 2px solid var(--ink);
+  border-radius: 22px;
   margin-bottom: 28px;
-  box-shadow: 6px 6px 0 rgba(176,137,63,0.5);
+  box-shadow: 0 16px 44px rgba(109,93,246,0.4);
 }
 
 .hero h1 {
@@ -218,23 +216,23 @@ body {
   font-family: 'Space Mono', monospace;
   font-weight: 700;
   letter-spacing: 0.04em;
-  border-radius: 4px;
+  border-radius: 8px;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .btn-primary {
-  background: var(--maroon);
-  color: var(--cream);
-  border: 2px solid var(--ink);
+  background: linear-gradient(135deg, var(--purple-light), var(--purple));
+  color: var(--white);
+  border: none;
   padding: 15px 28px;
   font-size: 14px;
   text-transform: uppercase;
-  box-shadow: 5px 5px 0 var(--ink);
+  box-shadow: 0 8px 24px rgba(109,93,246,0.4);
 }
 
 .btn-primary:hover {
-  transform: translate(-3px, -3px);
-  box-shadow: 8px 8px 0 var(--ink);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 36px rgba(109,93,246,0.55);
 }
 
 .btn-large {
@@ -249,7 +247,7 @@ body {
 }
 
 .eyebrow {
-  color: var(--maroon);
+  color: var(--purple-light);
   font-family: 'Space Mono', monospace;
   font-size: 12px;
   font-weight: 700;
@@ -274,12 +272,13 @@ body {
 }
 
 .feature-card {
-  background: var(--paper);
-  border: 1px solid var(--ink);
-  border-radius: 4px;
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
   padding: 28px 24px;
+  backdrop-filter: blur(10px);
   transition: border-color 0.2s ease, transform 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: 0 0 0 rgba(34,28,22,0);
+  box-shadow: 0 0 0 rgba(0,0,0,0);
   opacity: 0;
   animation: card-rise 0.6s ease forwards;
 }
@@ -297,18 +296,18 @@ body {
 }
 
 .feature-card:hover {
-  border-color: var(--maroon);
+  border-color: var(--purple-border);
   transform: translateY(-6px);
-  box-shadow: 6px 6px 0 rgba(176,137,63,0.45);
+  box-shadow: 0 16px 40px rgba(109,93,246,0.25);
 }
 
 .feature-icon {
   width: 44px;
   height: 44px;
-  border-radius: 8px;
-  border: 1px solid var(--ink);
+  border-radius: 10px;
+  border: 1px solid var(--purple-border);
   background: var(--icon-bg, var(--purple-fill));
-  color: var(--maroon);
+  color: var(--purple-light);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -379,15 +378,15 @@ body {
 
 /* Footer */
 .footer {
-  background: var(--ink);
-  border-top: 2px solid var(--ink);
+  background: #08070E;
+  border-top: 1px solid var(--glass-border);
   padding: 48px 0;
 }
 
 .footer .footer-title,
 .footer .footer-sub,
 .footer .footer-copy {
-  color: var(--cream);
+  color: var(--white);
 }
 
 .footer-inner {
@@ -405,8 +404,7 @@ body {
 .footer-icon {
   width: 40px;
   height: 40px;
-  border-radius: 8px;
-  border: 1px solid var(--brass);
+  border-radius: 10px;
   flex-shrink: 0;
 }
 
@@ -430,7 +428,7 @@ body {
 }
 
 .footer-copy a {
-  color: var(--brass) !important;
+  color: var(--purple-light) !important;
 }
 
 /* Responsive */
@@ -487,13 +485,14 @@ body {
 }
 
 .chat-container {
-  background: var(--paper);
-  border: 1px solid var(--ink);
-  border-radius: 4px;
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
   padding: 24px;
   max-width: 640px;
   margin: 0 auto;
-  box-shadow: 6px 6px 0 rgba(176,137,63,0.35);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 36px rgba(109,93,246,0.18);
 }
 
 .chat-messages {
@@ -508,8 +507,8 @@ body {
 
 .chat-message {
   padding: 12px 16px;
-  border-radius: 4px;
-  font-family: 'Libre Baskerville', Georgia, serif;
+  border-radius: 10px;
+  font-family: 'Inter', -apple-system, sans-serif;
   font-size: 14px;
   line-height: 1.6;
   max-width: 85%;
@@ -519,16 +518,16 @@ body {
 }
 
 .chat-message-bot {
-  background: var(--cream);
+  background: rgba(255,255,255,0.06);
   border: 1px solid var(--glass-border);
   color: var(--text-secondary);
   align-self: flex-start;
 }
 
 .chat-message-user {
-  background: var(--maroon);
-  border: 1px solid var(--ink);
-  color: var(--cream);
+  background: var(--purple);
+  border: none;
+  color: var(--white);
   align-self: flex-end;
 }
 
@@ -539,18 +538,18 @@ body {
 
 .chat-input {
   flex: 1;
-  background: var(--cream);
-  border: 1px solid var(--ink);
-  border-radius: 4px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
   padding: 12px 16px;
-  color: var(--ink);
-  font-family: 'Libre Baskerville', Georgia, serif;
+  color: var(--white);
+  font-family: 'Inter', -apple-system, sans-serif;
   font-size: 14px;
 }
 
 .chat-input:focus {
   outline: none;
-  border-color: var(--maroon);
+  border-color: var(--purple);
 }
 
 .chat-input::placeholder {
@@ -561,7 +560,7 @@ body {
   padding: 12px 22px;
   font-size: 13px;
   cursor: pointer;
-  border: 2px solid var(--ink);
+  border: none;
 }
 
 .chat-send-btn:disabled {
@@ -582,7 +581,7 @@ body {
 }
 
 .permission-card {
-  border-radius: 4px !important;
+  border-radius: 10px !important;
 }
 
 .back-link {
