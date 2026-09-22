@@ -4,7 +4,46 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JoyMind — Ask About Navin's Projects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+
+<!-- New: bold simple font + word-by-word reveal for bot answers.
+     Placed after style.css so it overrides earlier rules. -->
+<style>
+  .chat-message-bot {
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-weight: 600;
+    white-space: pre-wrap; /* keeps line breaks from the answer */
+  }
+
+  /* Each word starts invisible and slightly low, then fades up into place */
+  .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(6px);
+    animation: wordIn 0.4s ease forwards;
+  }
+  @keyframes wordIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Gentle pulse while waiting for the Worker */
+  .chat-message-bot.thinking {
+    animation: thinkingPulse 1.2s ease-in-out infinite;
+  }
+  @keyframes thinkingPulse {
+    0%, 100% { opacity: 0.45; }
+    50% { opacity: 1; }
+  }
+
+  /* Respect people who turn off motion on their device */
+  @media (prefers-reduced-motion: reduce) {
+    .word { animation: none; opacity: 1; transform: none; }
+    .chat-message-bot.thinking { animation: none; }
+  }
+</style>
 </head>
 <body>
 
@@ -38,9 +77,7 @@
   <div class="section-inner">
     <div class="chat-container">
       <div class="chat-messages" id="chatMessages">
-        <div class="chat-message chat-message-bot">
-          Hi! I'm JoyMind. Ask me anything about JoyFlow or Keystroke — try "What features does JoyFlow have?" or "Is Keystroke free?"
-        </div>
+        <div class="chat-message chat-message-bot" id="greeting">Hi! I'm JoyMind. Ask me anything about JoyFlow or Keystroke — try "What features does JoyFlow have?" or "Is Keystroke free?"</div>
       </div>
 
       <form class="chat-input-row" id="chatForm">
@@ -112,6 +149,41 @@ function addMessage(text, sender) {
   return msg;
 }
 
+// Fills a bot bubble with the text, one word at a time, each word fading in.
+// Uses textContent on every span (never innerHTML), so answers can't inject HTML.
+function showAnswer(el, text) {
+  el.textContent = "";
+  el.classList.remove("thinking");
+
+  // split(/(\s+)/) keeps the spaces and line breaks as their own pieces,
+  // so the original spacing is preserved
+  const parts = text.trim().split(/(\s+)/);
+  let wordIndex = 0;
+
+  parts.forEach((part) => {
+    if (!part) return;
+
+    if (/^\s+$/.test(part)) {
+      el.appendChild(document.createTextNode(part));
+      return;
+    }
+
+    const span = document.createElement("span");
+    span.className = "word";
+    span.textContent = part;
+    // 40ms between words, capped at 1.5s so long answers don't drag
+    span.style.animationDelay = Math.min(wordIndex * 40, 1500) + "ms";
+    el.appendChild(span);
+    wordIndex++;
+  });
+
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Animate the opening greeting once when the page loads
+const greeting = document.getElementById("greeting");
+showAnswer(greeting, greeting.textContent);
+
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const question = chatInput.value.trim();
@@ -122,6 +194,7 @@ chatForm.addEventListener("submit", async (e) => {
   chatSendBtn.disabled = true;
 
   const loadingMsg = addMessage("Thinking...", "bot");
+  loadingMsg.classList.add("thinking");
 
   try {
     const res = await fetch(WORKER_URL, {
@@ -133,9 +206,9 @@ chatForm.addEventListener("submit", async (e) => {
     if (!res.ok) throw new Error(`Request failed: ${res.status}`);
 
     const data = await res.json();
-    loadingMsg.textContent = data.answer || "Sorry, I couldn't find an answer to that.";
+    showAnswer(loadingMsg, data.answer || "Sorry, I couldn't find an answer to that.");
   } catch (err) {
-    loadingMsg.textContent = "Something went wrong reaching JoyMind. Please try again in a moment.";
+    showAnswer(loadingMsg, "Something went wrong reaching JoyMind. Please try again in a moment.");
     console.error(err);
   } finally {
     chatSendBtn.disabled = false;
